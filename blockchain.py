@@ -73,3 +73,40 @@ class Blockchain(object):
 	def last_block(self):
 		#Returns the last Block in the chain
 		return self.chain[-1]
+
+
+	def proof_of_work(self, last_proof):
+		"""
+		Simple PoW algo:
+		-find a number p' s.t. hash(pp') contains leading 4 zeros, where p is the previous p'
+		-p is the previous proof, and p' the new one
+
+		:param last_proof: <int>
+		:return: <int>
+		"""
+
+		proof = 0
+		while self.valid_proof(last_proof, proof) is False:
+			proof += 1
+		
+		return proof
+
+	@staticmethod
+	def valid_proof(last_proof, proof):
+		"""
+		Validates the Proof: Does hash(last_proof, proof) contain 4 leading zeroes?
+
+		:param last_proof: <int> Prev proof
+		:param proof: <int> Current proof
+		:return: <bool> True if verified False else.
+		"""
+
+		guess = f'{last_proof}{proof}'.encode()
+		guess_hash = hashlib.sha256(guess).hexdigest
+		return guess_hash[:4] == "0000" #the number of leading zeroes adjusts the difficulty of the algo
+
+
+
+
+
+
