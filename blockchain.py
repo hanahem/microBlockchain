@@ -1,5 +1,5 @@
 ########################
-#      µBlockchain
+#      microBlockchain
 ########################
 
 import hashlib
