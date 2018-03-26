@@ -2,6 +2,10 @@
 #      µBlockchain
 ########################
 
+import hashlib
+import json
+from time import time
+
 class Blockchain(object):
 	def __init__(self):
 		#the array containing the chain
@@ -9,12 +13,35 @@ class Blockchain(object):
 		#the transactions store
 		self.current_transactions = []
 
-	def new_block(self):
-		#Creates new block
+		#Genesis block
+		self.new_block(previous_hash=1, proof=100)
+
+	def new_block(self, proof, previous_hash=None):
+		"""
+		Creates a new Block to the Blockchain
+
+		:param proof: <int> PoW algorithm return
+		:param previous_hash: <str> Hash of previous Block
+		:return: <dict> New Block
+		"""
+
+		block = {
+			'index': len(self.chain) + 1,
+			'timestamp': time(),
+			'transactions': self.current_transactions,
+			'proof': proof,
+			'previous_hash': previous_hash or self.hash(self.chain[-1])		
+		}
+
+		#Reset current list of transactions
+		self.current_transactions = []
+
+		self.chain.append(block)
+		return block
 
 	def new_transaction(self, sender, recipient, amount):
 		"""
-		Creates a new block and adds it to the chain
+		Creates a new transaction to be added to the next mined block
 
 		:param sender: <str> Sender adress
 		:param recipient: <str> Recipient adress
@@ -32,9 +59,17 @@ class Blockchain(object):
 
 	@staticmethod
 	def hash(block):
-		#Returns a block's hash
-		pass
+		"""
+		Creates a SHA-256 hash of the Block
+		
+		:param block: <dict> Block
+		:return: <str> Hash result
+		"""
+		#Make sure the Dictionnary is ordered to have consistent hashes
+		block_string = json.dumps(block, sort_keys=True).encode()
+		return hashlib.sha256(block_string).hexdigest()
 
 	@property
 	def last_block(self):
 		#Returns the last Block in the chain
+		return self.chain[-1]
