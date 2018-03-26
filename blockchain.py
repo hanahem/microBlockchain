@@ -58,8 +58,9 @@ class Blockchain(object):
 			'recipient': recipient,
 			'amount': amount,		
 		})
-
-		return self.last_block['index'] + 1
+		
+		lst_block = self.last_block()
+		return lst_block['index'] + 1
 
 	@staticmethod
 	def hash(block):
@@ -125,7 +126,7 @@ blockchain = Blockchain()
 @app.route('/mine', methods=['GET'])
 def mine():
 	#run the PoW algo to get the next proof
-	last_block = blockchain.last_block
+	last_block = blockchain.last_block()
 	last_proof = last_block['proof']
 	proof = blockchain.proof_of_work(last_proof)
 
