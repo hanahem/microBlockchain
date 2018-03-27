@@ -59,7 +59,12 @@ class Blockchain(object):
 			'amount': amount,		
 		})
 		
+<<<<<<< HEAD
 		return self.last_block()['index'] + 1
+=======
+		lst_block = self.last_block()
+		return lst_block['index'] + 1
+>>>>>>> 33fbf58a74cb78809378c72c85320384b546ecb6
 
 	@staticmethod
 	def hash(block):
@@ -125,8 +130,13 @@ blockchain = Blockchain()
 @app.route('/mine', methods=['GET'])
 def mine():
 	#run the PoW algo to get the next proof
+<<<<<<< HEAD
 	previous_block = blockchain.last_block()
 	last_proof = previous_block['proof']
+=======
+	last_block = blockchain.last_block()
+	last_proof = last_block['proof']
+>>>>>>> 33fbf58a74cb78809378c72c85320384b546ecb6
 	proof = blockchain.proof_of_work(last_proof)
 
 	#we recieve a reward for finding the proof
@@ -138,7 +148,11 @@ def mine():
 	)
 
 	#forge new block to add it to the chain
+<<<<<<< HEAD
 	previous_hash = blockchain.hash(previous_block)
+=======
+	previous_hash = blockchain.hash(last_block)
+>>>>>>> 33fbf58a74cb78809378c72c85320384b546ecb6
 	block = blockchain.new_block(proof, previous_hash)
 
 	response = {
@@ -146,7 +160,11 @@ def mine():
 		'index': block['index'],
 		'transactions': block['transactions'],
 		'proof': block['proof'],
+<<<<<<< HEAD
 		'previous_hash': block['previous_hash'],
+=======
+		'previous_hash': block['previous_hash']
+>>>>>>> 33fbf58a74cb78809378c72c85320384b546ecb6
 	}
 	
 	return jsonify(response), 200
@@ -178,7 +196,11 @@ def full_chain():
 
 #Run the server on port 5000
 if __name__ == '__main__':
+<<<<<<< HEAD
 	app.run(host='0.0.0.0', port=5000)
+=======
+	app.run(host='127.0.0.1', port=5000)
+>>>>>>> 33fbf58a74cb78809378c72c85320384b546ecb6
 
 
 
