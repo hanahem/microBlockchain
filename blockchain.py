@@ -165,7 +165,7 @@ def new_transaction():
 	index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
 
 	response = {'message': f'Transaction will be added to Block {index}'}
-	return jsonify(response), 201
+	return jsonify(response), 200
 
 #Full chain endpoint
 @app.route('/chain', methods=['GET'])
@@ -178,7 +178,7 @@ def full_chain():
 
 #Run the server on port 5000
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=5000)
+	app.run(host='127.0.0.1', port=5000)
 
 
 
