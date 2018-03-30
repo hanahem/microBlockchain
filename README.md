@@ -41,20 +41,20 @@ To use the µBlockchain:
 Have fun! :)
 
 
-I'd like to thank @github/dvf for this absolutely minimalistic and yet concise tutorial, waiting for updates :)
+I'd like to thank @dvf for this absolutely minimalistic and yet concise tutorial, waiting for updates :)
 
 
 
 
 ## TODO: 
-[x] Implement Consensus algorithms
-[] Fix bash scripts bugs with strings params
-[] Test consensus algorithms and routes *(use a different port and a different machine)* and bash scripts
-[] Clean code
-[] Add more features
-[] Test
-[] Create middleware modules
-[] Test
-[] Create a "micro" React Web app to visualize how the block chain is created and how it is constructed through nodes interactions between nodes
-[] Test
-[] Install [Popmotion](https://github.com/Popmotion/popmotion) to create beautiful animations
+- [x] Implement Consensus algorithms
+- [ ] Fix bash scripts bugs with strings params
+- [ ] Test consensus algorithms and routes *(use a different port and a different machine)* and bash scripts
+- [ ] Clean code
+- [ ] Add more features
+- [ ] Test
+- [ ] Create middleware modules
+- [ ] Test
+- [ ] Create a "micro" React Web app to visualize how the block chain is created and how it is constructed through nodes interactions between nodes
+- [ ] Test
+- [ ] Install [Popmotion](https://github.com/Popmotion/popmotion) to create beautiful animations
