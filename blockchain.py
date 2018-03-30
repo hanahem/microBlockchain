@@ -158,7 +158,7 @@ class Blockchain(object):
 		return True
 		
 		
-	def resolve_conflict(self):
+	def resolve_conflicts(self):
 		"""
 		The Consensus Algorithm: confilct resolution
 		it replaces the client's chain with longest one in the network
@@ -261,8 +261,41 @@ def full_chain():
 if __name__ == '__main__':
 	app.run(host='127.0.0.1', port=5000)
 
-
-
+#Register a new node endpoint
+@app.rout('/nodes/register', methods=['POST'])
+def register_nodes():
+	values = request.get_json()
+	
+	nodes = values.get('nodes')
+	if nodes is None:
+		return "Error: Please supply a valid list of nodes", 400
+		
+	for node in nodes:
+		blockchain.register_node(node)
+		
+	response = {
+		'message': 'New nodes added',
+		'total_nodes': list(blockchain.nodes)
+	}
+	return jsonify(response), 200
+	
+#Resolve confilcts endpoint
+@app.rout('/nodes/resolve', methods=['GET'])
+def consensus():
+	replaced = blockchain.resolve_conflicts()
+	
+	if replaced:
+		response = {
+			'message': 'The chain was replaced',
+			'new_chain': blockchain.chain
+		}
+	else:
+		response = {
+			'message': 'This is the authoritative chain',
+			'chain': blockchain.chain
+		}
+		
+	return jsonify(response), 200
 
 
 
