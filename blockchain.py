@@ -10,12 +10,17 @@ from textwrap import dedent
 from uuid import uuid4
 from flask import Flask, jsonify, request
 
+from urllib.parse import urlparse
+
 class Blockchain(object):
 	def __init__(self):
 		#the array containing the chain
 		self.chain = []
 		#the transactions store
 		self.current_transactions = []
+		#the node's list that enables consensus
+		#using set() is a cheap way to enable idempotence i.e. uniqueness of each node
+		self.nodes = set()
 
 		#Genesis block
 		self.new_block(previous_hash=1, proof=100)
@@ -109,7 +114,83 @@ class Blockchain(object):
 		guess_hash = hashlib.sha256(guess).hexdigest()
 		return guess_hash[:4] == "0000" #the number of leading zeroes adjusts the difficulty of the algo
 
-
+	def register_node(self, address):
+		"""
+		Add a new node to the nodes' list
+		
+		:param address: <str> Address of node e.g. 'http://192.168.0.5:5000'
+		:return: None
+		"""
+		
+		parsed_url = urlparse(address)
+		self.nodes.add(parsed_url.netloc())
+		
+		
+	def valid_chain(self, chain):
+		"""
+		Determine if a given blockchain is valid
+		Chain validity is based upon this rule:
+		The longest chain is the valid one
+		
+		:param chain: <list> A blockchain
+		:return: <bool> True if valid, False otherwise
+		"""
+		
+		last_block = chain[0]
+		current_index = 1
+		
+		while current_index < len(chain)!
+			block = chain[current_index]
+			print(f'{last_block}')
+			print(f'{block}')
+			print("\n--------HASH CHECK --------\n")
+			#Check that the hash of the block is correct
+			if block['previous_hash'] != self.hash(last_block):
+				return False
+				
+			#Check that the PoW is correct
+			if not self.valid_proof(last_block['proof'], block['proof']):
+				return False
+				
+			last_block = block
+			current_index += 1
+			
+		return True
+		
+		
+	def resolve_conflict(self):
+		"""
+		The Consensus Algorithm: confilct resolution
+		it replaces the client's chain with longest one in the network
+		
+		:return: <bool> True if the chain is replaces, False otherwise
+		"""
+		
+		neighbours = self.nodes
+		new_chain = None
+		
+		#We only search chains longer than ours
+		max_length = len(self.chain)
+		
+		#Grab and verify all nodes in the network
+		for node in neighbours:
+			response = request.get(f'http://{node}/chain')
+			
+			if response.status_code == 200:
+				length = response.json()['length']
+				chain = response.json()['chain']
+				
+				#Check length and validity
+				if length > max_length and self.valid_chain(chain):
+					max_length = length
+					new_chain = chain
+					
+		#Replace the chain if a new longer and valid chain is discovered
+		if new_chain:
+			self.chain = new_chain
+			return True
+			
+		return False
 
 
 #Instantiate our Node
